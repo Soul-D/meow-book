@@ -35,11 +35,60 @@ object EvalApp extends App {
   println("omg it is a monad")
 
   val answer: Eval[Int] = for {
-    a <- Eval.now({println("Calculating 40. NOW!"); 40})
-    b <- Eval.later({println("Calculating 2. Later..."); 2})
-  } yield a + b
+    a <- Eval.now({
+      println("Calculating 40. NOW!")
+      40
+    })
+    b <- Eval.later({
+      println("Calculating 2. Later...")
+      2
+    })
+  } yield {
+    println("Adding a and b")
+    a + b
+  }
 
   println(answer)
   println("Not yet...")
   println(answer.value)
+  println("And again")
+  println(answer.value)
+
+  println("one more time")
+  val answerAgain: Eval[Int] = Eval.now({
+    println("Calculating 40. NOW!")
+    40
+  }).flatMap(a => Eval.later({
+    println("Calculating 2. Later...")
+    2
+  }).map(b => {
+    println("Adding a and b")
+    a + b
+  }))
+
+  println(answerAgain)
+  println("Not yet...")
+  println(answerAgain.value)
+  println("And again")
+  println(answerAgain.value)
+
+  println("Once more")
+  val answerAgainAgain: Eval[Int] = Eval.now({
+    println("Calculating 40. NOW!")
+    40
+  }).flatMap(a => Eval.later({
+    println("Calculating 2. Later...")
+    2
+  }).map(b => {
+    println("Adding a and b")
+    a + b
+  })).memoize
+
+  println(answerAgainAgain)
+  println("Not yet...")
+  println(answerAgainAgain.value)
+  println("And again")
+  println(answerAgainAgain.value)
+
+
 }

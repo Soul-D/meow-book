@@ -49,7 +49,9 @@ object Monads extends App {
   val eleven = for {
     o <- one
     t <- ten
-  } yield o + t
+  } yield {
+    o + t
+  }
 
   println(eleven)
 
