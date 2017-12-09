@@ -2,6 +2,7 @@ package chap4
 
 import cats.Eval
 
+
 object EvalApp extends App {
 
   val now = Eval.now({
@@ -84,11 +85,20 @@ object EvalApp extends App {
     a + b
   })).memoize
 
+
   println(answerAgainAgain)
   println("Not yet...")
   println(answerAgainAgain.value)
   println("And again")
   println(answerAgainAgain.value)
 
+  val alwaysMeansAlwaysOrDoesIt = (for {
+    n <- Eval.always {
+      println("Calculating 10"); 10
+    }
+    y <- Eval.now(20)
+  } yield n + y).memoize
 
+  println(alwaysMeansAlwaysOrDoesIt.value)
+  println(alwaysMeansAlwaysOrDoesIt.value)
 }
